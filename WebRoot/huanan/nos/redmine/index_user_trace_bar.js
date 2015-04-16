@@ -53,7 +53,7 @@ function index_user_trace_bar_option(){
 		    ],
 		    series : [{ 
      name:'开发流程',type:'bar',   
- data:[47.5,39.0,52.0,34.0,56.0,4.0,0,40.0,0,39.5,0,3.0] 
+ data:[47.5,63.0,52.0,34.0,56.0,4.0,0,40.0,0,39.5,0,3.0] 
 }  
 ,{ 
      name:'CASE流程',type:'line',yAxisIndex: 1,markPoint : {data : [{type : 'max', name: '最大值'}]},   

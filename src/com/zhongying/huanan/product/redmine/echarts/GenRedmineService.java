@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import com.zhongying.huanan.product.echarts.util.EChartsUtil;
 import com.zhongying.huanan.product.redmine.util.DBConn;
 
 public class GenRedmineService {
@@ -22,6 +24,8 @@ public class GenRedmineService {
 
 		String sql = "select * from (";
 		sql += " select p.`name` as 'projectname',sum(t.hours) as 'totalhours' ";
+		sql += " ,count(distinct i.id) as 'totalnums' ";
+		
 		sql += " from issues i ,time_entries t,projects p ";
 		sql += " where i.id=t.issue_id and t.project_id=p.id ";
 
@@ -55,12 +59,15 @@ public class GenRedmineService {
 			while (rs.next()) {
 				String projectname = rs.getString("projectname");
 				String totalhours = rs.getString("totalhours");
-
+				String totalnums = rs.getString("totalnums");
+				
 				HashMap map = new HashMap();
 				map.put("projectname", projectname);
 				map.put("totalhours", totalhours + "");
+				map.put("totalnums", totalnums + "");
 
-				System.err.println(projectname + "--" + totalhours);
+
+				System.err.println(projectname + "--" + totalhours+"--"+totalnums);
 
 				mapList.add(map);
 
@@ -137,15 +144,23 @@ public class GenRedmineService {
 		return mapList;
 	}
 
-	public LinkedList<HashMap> queryProjectTraceHours(Properties prop, Connection con) {
-		LinkedList<HashMap> mapList = new LinkedList<HashMap>();
+	public HashMap queryProjectTraceHours(Properties prop, Connection con) {
+		
 
+		HashMap map = new HashMap();
+		
 		String beginDate = prop.getProperty("beginDate");
 		String endDate = prop.getProperty("endDate");
 		String areaLimit = prop.getProperty("areaLimit");
+		String projectLimit = prop.getProperty("projectLimit");
+		String listLimit = prop.getProperty("listLimit");
+		
+		
 
 		String sql = "select * from (";
 		sql += " select p.`name` as 'projectname',tr.name as 'tracename',sum(t.hours) as 'totalhours' ";
+		sql += " ,count(distinct i.id) as 'totalnums' ";
+		
 		sql += " from issues i ,time_entries t,projects p,trackers tr";
 		sql += " where i.id=t.issue_id and t.project_id=p.id and i.tracker_id=tr.id";
 		if (beginDate != null && "".equals(beginDate) == false) {
@@ -158,10 +173,19 @@ public class GenRedmineService {
 		if (areaLimit != null && "".equals(areaLimit) == false) {
 			sql += " and p.parent_id in(" + areaLimit + ") ";// /====
 		}
+		
+		if (projectLimit != null && "".equals(projectLimit) == false) {
+			sql += " and p.id in(" + projectLimit + ") ";// /====
+		}
+		
 		sql += " group by p.id,tracker_id";
 		sql += " order by p.id,tr.id";
 		sql += " ) M  where 1=1 ";
 		sql += " order by M.totalhours desc";
+		
+		if (listLimit != null && "".equals(listLimit) == false) {
+			sql += " limit "+listLimit;// /====
+		}
 
 		PreparedStatement psd = null;
 		ResultSet rs = null;
@@ -174,28 +198,39 @@ public class GenRedmineService {
 			psd.setString(2, endDate);
 
 			rs = psd.executeQuery();
+			
+			HashSet projectSet=new HashSet();
+			HashSet traceSet=new HashSet();
+			
 
 			while (rs.next()) {
 				String projectname = rs.getString("projectname");
 				String tracename = rs.getString("tracename");
 				String totalhours = rs.getString("totalhours");
-
-				HashMap map = new HashMap();
-				map.put("projectname", projectname);
-				map.put("tracename", tracename);
-				map.put("totalhours", totalhours);
-
-				mapList.add(map);
-
+				String totalnums = rs.getString("totalnums");
+		
+				map.put(projectname+tracename+"totalhours",totalhours);
+				map.put(projectname+tracename+"totalnums",totalnums);
+				
+				projectSet.add(projectname);
+				traceSet.add(tracename);
+				
+				
 			}
 			rs.close();
+			
+			String project_names=EChartsUtil.convertSetString(projectSet);
+			String trace_names=EChartsUtil.convertSetString(traceSet);
+			map.put("project_names", project_names);
+			map.put("trace_names", trace_names);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			DBConn.cleanPre(psd);
 		}
 
-		return mapList;
+		return map;
 	}
 
 	public HashMap queryUserTraceHours(Properties prop, Connection con) {
@@ -253,6 +288,7 @@ public class GenRedmineService {
 
 		return map;
 	}
+	
 
 	public HashMap queryUserHours(Properties prop, Connection con) {
 		HashMap map = new HashMap();

@@ -1,6 +1,7 @@
 
 	var index_trace_pie_chart;
 	var index_project_pie_chart;
+	var index_project_pie_numbers_chart;
 	var index_user_total_bar_item_chart;
 	var index_user_trace_bar_chart;
 	var index_user_total_bar_chart;
@@ -38,6 +39,15 @@ function refresh(isBtnRefresh) {
 		index_project_pie_chart = echarts.init(index_project_pie_div, curTheme);
 	
 		index_project_pie_chart.setOption(index_project_pie_option());
+		var index_project_pie_numbers_div = document.getElementById("index_project_pie_numbers_div");
+		
+		if (index_project_pie_numbers_chart && index_project_pie_numbers_chart.dispose) {
+			index_project_pie_numbers_chart.dispose();
+		}
+		
+		index_project_pie_numbers_chart = echarts.init(index_project_pie_numbers_div, curTheme);
+	
+		index_project_pie_numbers_chart.setOption(index_project_pie_numbers_option());
 		var index_user_total_bar_item_div = document.getElementById("index_user_total_bar_item_div");
 		
 		if (index_user_total_bar_item_chart && index_user_total_bar_item_chart.dispose) {

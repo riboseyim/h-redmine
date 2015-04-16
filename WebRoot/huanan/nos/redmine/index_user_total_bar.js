@@ -53,7 +53,7 @@ function index_user_total_bar_option(){
 		    ],
 		    series : [{ 
      name:'总计',type:'bar',markPoint : {data : [{type : 'max', name: '最大值'}]},markPoint : {data : [{type : 'min', name: '最小值'}]},markLine : { data : [{type : 'average', name: '平均值'}]},   
- data:[83.5,44.0,57.0,76.0,75.0,111.0,92.0,83.0,97.0,126.5,24.5,75.5] 
+ data:[83.5,68.0,57.0,76.0,75.0,111.0,92.0,83.0,97.0,126.5,24.5,75.5] 
 }  
 ]
 		};

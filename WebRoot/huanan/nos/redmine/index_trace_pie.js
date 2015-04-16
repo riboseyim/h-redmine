@@ -3,21 +3,24 @@ function index_trace_pie_option(){
 	
 	var option  = {
 		    title : {
-		        text: '内容占比',
+		       // text: '内容占比',
 		        x:'center'
 		    },
 		    tooltip : {
 		        trigger: 'item',
+		        
 		        formatter: "{a} <br/>{b} : {c} ({d}%)"
 		    },
 		    legend: {
 		       //orient : 'vertical',
 			orient:'horizontal',
-			x : 'center',
+			x : 'left',
 		        data:['实施流程','开发流程','CASE流程','内部流程']
 		    },
 		    toolbox: {
 		        show : true,
+		        x:'left',
+		        y:'bottom',
 		        feature : {
 		            mark : {show: false},
 		            dataView : {show: false, readOnly: false},
@@ -44,7 +47,7 @@ function index_trace_pie_option(){
 		            type:'pie',
 		            radius : '55%',
 		            center: ['50%', '60%'],
-		            data:[{value:360.5,name:'实施流程'},{value:315.0,name:'开发流程'},{value:259.0,name:'CASE流程'},{value:10.5,name:'内部流程'}
+		            data:[{value:360.5,name:'实施流程'},{value:339.0,name:'开发流程'},{value:259.0,name:'CASE流程'},{value:10.5,name:'内部流程'}
 		            ]
 		        }
 		    ]

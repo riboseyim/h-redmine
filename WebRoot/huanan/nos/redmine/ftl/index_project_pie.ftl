@@ -6,11 +6,11 @@ index-project-pie-option.ftl
 create:2015-04-13
 -->
 
-function index_project_pie_option(){
+function index_project_pie_${ChartsIndex}_option(){
 	
 	var option  = {
 		    title : {
-		        text: '${index_project_pie_name}',
+		        //text: '${index_project_pie_name}',
 		        x:'center'
 		    },
 		    tooltip : {

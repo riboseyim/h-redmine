@@ -1,39 +1,35 @@
 
 <#--- 
 Redmine--¸ÅÀÀÊÓÍ¼
-index-trace-pie-option.ftl
+index-project-pie-option.ftl
 Ä£°å
-create:2015-04-16
+create:2015-04-13
 -->
 
-function index_trace_pie_option(){
+function index_project_pie_numbers_option(){
 	
 	var option  = {
 		    title : {
-		        text: '${index_trace_pie_name}',
+		        text: '${index_project_pie_name}',
 		        x:'center'
 		    },
 		    tooltip : {
 		        trigger: 'item',
-		        x:'left',
-		        y:'bottom',
 		        formatter: "{a} <br/>{b} : {c} ({d}%)"
 		    },
 		    legend: {
-		       //orient : 'vertical',
-			orient:'horizontal',
-			x : 'center',
-		        data:[${index_trace_pie_keys}]
+		        orient : 'vertical',
+		        x : 'right',
+		        data:[${index_project_pie_keys}]
 		    },
 		    toolbox: {
 		        show : true,
 		        x:'left',
-		        y:'bottom',
 		        feature : {
 		            mark : {show: false},
 		            dataView : {show: false, readOnly: false},
 		            magicType : {
-		                show: false, 
+		                show: true, 
 		                type: ['pie', 'funnel'],
 		                option: {
 		                    funnel: {
@@ -51,11 +47,11 @@ function index_trace_pie_option(){
 		    calculable : true,
 		    series : [
 		        {
-		            name:'${index_trace_pie_name}',
+		            name:'${index_project_pie_name}',
 		            type:'pie',
 		            radius : '55%',
 		            center: ['50%', '60%'],
-		            data:[${index_trace_pie_values}
+		            data:[${index_project_pie_values}
 		            ]
 		        }
 		    ]

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.zhongying.huanan.product.echarts.util.EChartsDateUtil;
+import com.zhongying.huanan.product.echarts.util.EChartsUtil;
 import com.zhongying.huanan.product.redmine.util.DBConn;
 import com.zhongying.huanan.product.redmine.util.ReadFile;
 import com.zhongying.huanan.product.redmine.util.RedmineConfig;
@@ -26,7 +26,7 @@ import freemarker.template.TemplateException;
 public class GenRedmineJS {
 	public static void main(String[] args) {
 
-		UpdateRedmineIndexHTML_Month();
+		// UpdateRedmineIndexHTML_Month();
 
 		// test();
 	}
@@ -35,8 +35,8 @@ public class GenRedmineJS {
 		ReadFile config = ReadFile.getInstance();
 		Properties sysprop = config.getConfigFile(RedmineConfig.configFile);
 
-		String beginDate = EChartsDateUtil.getMonthFirstDay();
-		String endDate = EChartsDateUtil.getMonthLastDay();
+		String beginDate = EChartsUtil.getMonthFirstDay();
+		String endDate = EChartsUtil.getMonthLastDay();
 
 		Properties prop = new Properties();
 		prop.put("beginDate", beginDate);
@@ -55,96 +55,100 @@ public class GenRedmineJS {
 			DBConn db = new DBConn();
 			con = db.getDirectConn();
 			System.err.println("UpdateRedmineIndexHTML  get db conn finished ....");
-			
+
 			String OutputDIR = RedmineConfig.EchartsAppDir;
 			String TemplateDIR = OutputDIR + File.separator + "ftl";
-			
-			
-			Map<String,Object> paramMap;
-			
+
+			Map<String, Object> paramMap;
+
 			// =================================================================================
 
-			paramMap = loadIndexProjectPie(prop, con);
-			buildStandCharts("index_project_pie", paramMap);
-			
+			// paramMap = loadIndexProjectPie(prop, con);
+			// buildStandCharts("index_project_pie","",paramMap);
+
+			// paramMap = loadIndexProjectPieNums(prop, con);
+			// paramMap.put("index_project_pie_name", "项目任务数");
+			// buildStandCharts("index_project_pie_numbers","",paramMap);
+
 			// =================================================================================
-			paramMap = loadIndexTracePie(prop, con);
-			buildStandCharts("index_trace_pie", paramMap);
-			
+			// paramMap = loadIndexTracePie(prop, con);
+			// buildStandCharts("index_trace_pie","", paramMap);
+
 			// =================================================================================
-		
-			// =================================================================================
-			paramMap = loadIndexUserTraceBar(prop, con);
-			buildStandCharts("index_user_trace_bar", paramMap);
-			
-			// ========================================总量合格率=================================
-			paramMap = loadIndexUserTotalBar(prop, con);
-			buildStandCharts("index_user_total_bar", paramMap);
+
+			// ======================================人员分成功（取消）===========================================
+			// paramMap = loadIndexUserTraceBar(prop, con);
+			// buildStandCharts("index_user_trace_bar","", paramMap);
+
+			// ========================================总量合格率(取消)=================================
+			// paramMap = loadIndexUserTotalBar(prop, con);
+			// buildStandCharts("index_user_total_bar","", paramMap);
 
 			// ========================================总量成分堆积===============================
-			paramMap = loadIndexUserTotalBarItem(prop, con);
-			buildStandCharts("index_user_total_bar_item", paramMap);
-	
+			// paramMap = loadIndexUserTotalBarItem(prop, con);
+			// buildStandCharts("index_user_total_bar_item","", paramMap);
+
 			buildIndexMainJS(OutputDIR, TemplateDIR);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			DBConn.releaseConnection(con);// /释放
 		}
 	}
-	
-	
-	public static void buildIndexMainJS(String OutputDIR,String TemplateDIR){
+
+	public static void buildIndexMainJS(String OutputDIR, String TemplateDIR) {
 
 		String ChartName = "index_main";
 		String TEMPLATENAME = ChartName + ".ftl";
 
 		String filepath = OutputDIR + File.separator + ChartName + ".js";
-		
-		List chartsList = new ArrayList(); 
-		
+
+		List chartsList = new ArrayList();
+
 		chartsList.add("index_trace_pie");
 		chartsList.add("index_project_pie");
-		
+		chartsList.add("index_project_pie_numbers");
+
 		chartsList.add("index_user_total_bar_item");
-		
+
 		chartsList.add("index_user_trace_bar");
 		chartsList.add("index_user_total_bar");
-	
-		
-		List<Map> connectList = new ArrayList<Map>(); 
-		HashMap connect=new HashMap();
-		connect.put("source","index_trace_pie"+"_chart");
-		connect.put("target","index_user_total_bar_item"+"_chart");
+
+		List<Map> connectList = new ArrayList<Map>();
+		HashMap connect = new HashMap();
+		connect.put("source", "index_trace_pie" + "_chart");
+		connect.put("target", "index_user_total_bar_item" + "_chart");
 		connectList.add(connect);
-		
-		connect=new HashMap();
-		connect.put("source","index_user_total_bar_item"+"_chart");
-		connect.put("target","index_trace_pie"+"_chart");
-		
-		
+
+		connect = new HashMap();
+		connect.put("source", "index_user_total_bar_item" + "_chart");
+		connect.put("target", "index_trace_pie" + "_chart");
+
 		connectList.add(connect);
-		
-		
-		
+
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("chartsList", chartsList);
 		paramMap.put("connectList", connectList);
-		
+
 		execTemplate(paramMap, TemplateDIR, TEMPLATENAME, filepath);
 	}
-	
-	
-	public static void buildStandCharts(String ChartName,Map<String,Object> paramMap) throws Exception{
+
+	public static void buildStandCharts(String ChartName, String ChartIndex, Map<String, Object> paramMap) throws Exception {
 		String OutputDIR = RedmineConfig.EchartsAppDir;
-		
+
 		String TemplateDIR = OutputDIR + File.separator + "ftl";
-		
+
 		String TEMPLATENAME = ChartName + ".ftl";
-		
-		String filepath = OutputDIR + File.separator + ChartName + ".js";
-	
+
+		String filepath = "";
+
+		if (ChartIndex != null && "".equals(ChartIndex) == false) {
+			filepath = OutputDIR + File.separator + ChartName + "_" + ChartIndex + ".js";
+		} else {
+			filepath = OutputDIR + File.separator + ChartName + ".js";
+		}
+
 		execTemplate(paramMap, TemplateDIR, TEMPLATENAME, filepath);
 	}
 
@@ -160,7 +164,7 @@ public class GenRedmineJS {
 	public static Map<String, Object> loadIndexProjectPie(Properties prop, Connection con) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 
-		String index_project_pie_name = "项目工时分布";
+		String index_project_pie_name = "项目占比";
 		String index_project_pie_keys = "";
 		String index_project_pie_values = "";
 
@@ -189,6 +193,189 @@ public class GenRedmineJS {
 
 	/**
 	 * 加载数据loadIndexProjectPie
+	 * 
+	 * @param beginDate
+	 * @param endDate
+	 * @param con
+	 * @return
+	 * @throws Exception
+	 */
+	public static Map<String, Object> loadIndexProjectPieNums(Properties prop, Connection con) throws Exception {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+
+		String index_project_pie_keys = "";
+		String index_project_pie_values = "";
+
+		GenRedmineService service = new GenRedmineService();
+
+		List<HashMap> projectHoursList = service.queryProjectHours(prop, con);
+
+		for (int i = 0; i < projectHoursList.size(); i++) {
+			HashMap obj = (HashMap) projectHoursList.get(i);
+
+			index_project_pie_keys += "'" + obj.get("projectname") + "'";
+			index_project_pie_values += "{value:" + obj.get("totalnums") + "," + "name:'" + obj.get("projectname") + "'" + "}";
+
+			if (i < projectHoursList.size() - 1) {
+				index_project_pie_keys += ",";
+				index_project_pie_values += ",";
+			}
+		}
+
+		paramMap.put("index_project_pie_keys", index_project_pie_keys);
+		paramMap.put("index_project_pie_values", index_project_pie_values);
+
+		return paramMap;
+	}
+
+	/**
+	 * 加载数据loadIndexUserTotalBar 总量合格率
+	 * 
+	 * @param beginDate
+	 * @param endDate
+	 * @param con
+	 * @return
+	 * @throws Exception
+	 */
+	public static Map<String, Object> loadIndexProjectBarItem(Properties prop, Connection con) throws Exception {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+
+		String index_user_bar_item_name = "项目成分";
+		String index_user_bar_item_usernames = "";
+		String index_user_bar_item_keys = "";
+		String index_user_bar_item_data = "";
+		String index_user_bar_item_yAxis = "";
+
+		index_user_bar_item_yAxis += "{";
+		index_user_bar_item_yAxis += "type : 'value',";
+		index_user_bar_item_yAxis += "name : '总工时',";
+		index_user_bar_item_yAxis += "axisLabel : {";
+		index_user_bar_item_yAxis += "formatter : '{value} h'";
+		index_user_bar_item_yAxis += "}";
+		index_user_bar_item_yAxis += "}";
+
+		System.err.println("loadIndexTopProjectBarItem  query data begin ....");
+
+		GenRedmineService service = new GenRedmineService();
+
+		
+
+		LinkedList userList = service.queryUserList(prop, con);
+		index_user_bar_item_usernames = convertListToString(userList, "'");
+
+		HashMap userhoursMap = service.queryProjectTraceHours(prop, con);
+		
+		index_user_bar_item_keys =(String)userhoursMap.get("project_names");
+
+		System.err.println("loadIndexTopProjectBarItem  query data finished ....");
+
+		int rgba1 = 80;
+		int rgba2 = 120;
+		int rgba3 = 52;
+		int rgba4 = 1;
+
+		List<Map> lineList = new ArrayList<Map>();
+
+		for (int j = 0; j < traceList.size(); j++) {
+
+			String tracename = (String) traceList.get(j);
+
+			index_user_bar_item_yAxis += ",{";
+			index_user_bar_item_yAxis += "type : 'value',";
+			index_user_bar_item_yAxis += "name : '数量',";
+			index_user_bar_item_yAxis += "axisLabel : {";
+			index_user_bar_item_yAxis += "formatter : '{value} 个'";
+			index_user_bar_item_yAxis += "}";
+			index_user_bar_item_yAxis += "}";
+
+			String thisNodeData = "{ \n";
+			thisNodeData += " name:'" + tracename + "',";
+			thisNodeData += " type:'bar',";
+			thisNodeData += "   tooltip : {trigger: 'item'},";
+			thisNodeData += "    stack: '总工时',";
+			thisNodeData += "itemStyle : {";
+			thisNodeData += "	normal : {";
+			thisNodeData += "		color : 'rgba(" + rgba1 + "," + rgba2 + "," + rgba3 + "," + rgba4 + ")',";
+			thisNodeData += "		label : {";
+			// thisNodeData += "			show : true,position:'inside',";
+			thisNodeData += "			show : false,";
+
+			thisNodeData += "			textStyle : {";
+			thisNodeData += "				color : '#27727B'";
+			thisNodeData += "			}";
+			thisNodeData += "		}";
+			thisNodeData += "	}";
+			thisNodeData += "},";
+
+			rgba1 += 100;
+			rgba2 += 80;
+			rgba3 += 50;
+			rgba4 += 40;
+
+			thisNodeData += "   \n data:[";
+
+			String lineDataValues = "";
+
+			for (int i = 0; i < userList.size(); i++) {
+				String username = (String) userList.get(i);
+
+				String hours = (String) userhoursMap.get(username + tracename + "totalhours");
+				if (hours == null || "".equals(hours)) {
+					hours = "0";
+				}
+
+				thisNodeData += hours;
+
+				String nums = (String) userhoursMap.get(username + tracename + "totalnums");
+				if (nums == null || "".equals(nums)) {
+					nums = "0";
+				}
+				lineDataValues += nums;
+
+				if (i < userList.size() - 1) {
+					thisNodeData += ",";
+					lineDataValues += ",";
+
+				}
+
+			}
+
+			thisNodeData += "] \n";
+			thisNodeData += "}  \n";
+
+			String lineData = "{";
+			lineData += " name:'" + tracename + "',";
+			lineData += " type:'line',";
+			lineData += "yAxisIndex: 1,";
+			lineData += "data:[";
+			lineData += lineDataValues;
+			lineData += "]";
+			lineData += "} \n";
+
+			if (j < traceList.size() - 1) {
+				thisNodeData += ",";
+
+				lineData += ",";
+			} else {
+				lineData = "," + lineData;
+			}
+			index_user_bar_item_data += thisNodeData;
+			index_user_bar_item_data += lineData;
+
+		}
+
+		paramMap.put("index_user_total_bar_item_name", index_user_bar_item_name);
+		paramMap.put("index_user_total_bar_item_keys", index_user_bar_item_keys);
+		paramMap.put("index_user_total_bar_item_usernames", index_user_bar_item_usernames);
+
+		paramMap.put("index_user_bar_item_yAxis", index_user_bar_item_yAxis);
+		paramMap.put("index_user_total_bar_item_data", index_user_bar_item_data);
+
+		return paramMap;
+	}
+
+	/**
+	 * 加载数据loadIndexTracetPie
 	 * 
 	 * @param beginDate
 	 * @param endDate
@@ -348,7 +535,7 @@ public class GenRedmineJS {
 	public static Map<String, Object> loadIndexUserTotalBarItem(Properties prop, Connection con) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 
-		String index_user_bar_item_name = "工作内容分布比例";
+		String index_user_bar_item_name = "工作内容分布";
 		String index_user_bar_item_usernames = "";
 		String index_user_bar_item_keys = "";
 		String index_user_bar_item_data = "";
@@ -376,8 +563,8 @@ public class GenRedmineJS {
 
 		System.err.println("loadIndexUserTotalBarItem  query data finished ....");
 
-		int rgba1 = 121;
-		int rgba2 = 195;
+		int rgba1 = 80;
+		int rgba2 = 120;
 		int rgba3 = 52;
 		int rgba4 = 1;
 
@@ -414,10 +601,10 @@ public class GenRedmineJS {
 			thisNodeData += "	}";
 			thisNodeData += "},";
 
-			rgba1 += 50;
-			rgba2 += 20;
-			rgba3 += 20;
-			rgba4 += 20;
+			rgba1 += 100;
+			rgba2 += 80;
+			rgba3 += 50;
+			rgba4 += 40;
 
 			thisNodeData += "   \n data:[";
 
@@ -629,4 +816,6 @@ public class GenRedmineJS {
 			DBConn.releaseConnection(con);// /释放
 		}
 	}
+
+	
 }
