@@ -24,9 +24,9 @@
 
 	<div class="container-fluid">
 		<div class="row-fluid example">
-			<div id="sidebar-code" class="col-md-1"  style="display: none">
+			<div id="sidebar-code" class="col-md-1" style="display: none">
 				<div class="well sidebar-nav">
-					<div class="nav-header" >
+					<div class="nav-header">
 						<a href="#" onclick="autoResize()"
 							class="glyphicon glyphicon-resize-full" id="icon-resize"> </a> <span>更多精彩...</span><br>
 						<br> <br> <a href="#" id="btnSaveImage"
@@ -38,17 +38,21 @@
 				<!--/.well -->
 			</div>
 			<!--/span-->
-			<div id="graphic" class="col-md-10">
+			<div id="graphic" class="col-md-12">
+				<div id="index_trace_pie_div" class="main"
+					style="width:30%;float:left;margin-right:0;padding-right:0;border-right-width:0"></div>
 				<div id="index_user_total_bar_div" style="display: none"
 					class="main"></div>
-				<div id="index_user_total_bar_item_div" class="main"></div>
+				<div id="index_user_total_bar_item_div" class="main"
+					style="width:70%;margin-left:0;padding-left:0;border-left-width:0"></div>
 				<div id="index_project_pie_div" class="main"></div>
 				<!--  
 				<div id="index_case_funnel_div" class="main"
 					style="height: 300px;weight:800px">
 				</div>
 				-->
-				<div id="index_user_trace_bar_div"  style="display: none" class="main"></div>
+				<div id="index_user_trace_bar_div" style="display: none"
+					class="main"></div>
 			</div>
 
 		</div>
@@ -62,13 +66,15 @@
 
 	<!-- 必须置于下面 -->
 	<script src="index-main.js"></script>
-	<script src="index-project-pie-option.js"></script>
-	<script src="index-case-funnel-option.js"></script>
-	<script src="index-user-trace-bar-option.js"></script>
+	<script src="index_project_pie.js"></script>
 
-	<script src="index-user-total-bar-option.js"></script>
-	<script src="index-user-total-bar-item-option.js"></script>
+	<script src="index_trace_pie.js"></script>
 
+	<script src="index_case_funnel.js"></script>
+	<script src="index_user_trace_bar.js"></script>
+
+	<script src="index_user_total_bar.js"></script>
+	<script src="index_user_total_bar_item.js"></script>
 
 </body>
 

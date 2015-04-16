@@ -74,6 +74,68 @@ public class GenRedmineService {
 
 		return mapList;
 	}
+	
+	public LinkedList<HashMap> queryTraceHours(Properties prop, Connection con) {
+		LinkedList<HashMap> mapList = new LinkedList<HashMap>();
+
+		String beginDate = prop.getProperty("beginDate");
+		String endDate = prop.getProperty("endDate");
+		String areaLimit = prop.getProperty("areaLimit");
+
+		String sql = "select * from (";
+		sql += " select tr.name as 'tracename',sum(t.hours) as 'totalhours' ";
+		sql += " from issues i ,time_entries t,trackers tr,projects p ";
+		sql += " where i.id=t.issue_id  and i.tracker_id=tr.id and t.project_id=p.id ";
+
+		if (beginDate != null && "".equals(beginDate) == false) {
+			sql += " and t.spent_on>=? ";
+		}
+		if (endDate != null && "".equals(endDate) == false) {
+			sql += " and t.spent_on<=? ";
+		}
+
+		if (areaLimit != null && "".equals(areaLimit) == false) {
+			sql += " and p.parent_id in(" + areaLimit + ") ";// /====
+		}
+
+		sql += " group by tr.id";
+		sql += " order by totalhours desc";
+		sql += " ) M  where 1=1 ";
+
+		PreparedStatement psd = null;
+		ResultSet rs = null;
+		try {
+			DBConn db = new DBConn();
+			con = db.getDirectConn();
+
+			psd = con.prepareStatement(sql);
+			psd.setString(1, beginDate);
+			psd.setString(2, endDate);
+
+			rs = psd.executeQuery();
+
+			while (rs.next()) {
+				String tracename = rs.getString("tracename");
+				String totalhours = rs.getString("totalhours");
+
+				HashMap map = new HashMap();
+				map.put("tracename", tracename);
+				map.put("totalhours", totalhours + "");
+
+				System.err.println(tracename + "--" + totalhours);
+
+				mapList.add(map);
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBConn.cleanPre(psd);
+		}
+
+		return mapList;
+	}
 
 	public LinkedList<HashMap> queryProjectTraceHours(Properties prop, Connection con) {
 		LinkedList<HashMap> mapList = new LinkedList<HashMap>();
