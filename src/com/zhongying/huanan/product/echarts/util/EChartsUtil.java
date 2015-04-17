@@ -19,7 +19,7 @@ public class EChartsUtil {
 		set.add("开发流程");
 		set.add("实施流程");
 
-		System.out.println(convertSetString(set));
+		System.out.println(convertSetString(set,"'"));
 
 	}
 	
@@ -54,14 +54,21 @@ public class EChartsUtil {
 	
 
 
-	public static String convertSetString(HashSet set) {
+	public static String convertSetString(HashSet set,String segChar) {
 		String str = "";
 		if (set != null) {
 			int i = 0;
 			for (Iterator iterator = set.iterator(); iterator.hasNext();) {
 				String object = (String) iterator.next();
 			//	System.out.println(object);
-				str += "'" + object + "'";
+				
+				if(segChar!=null&&"".equals(segChar)==false){
+					str += segChar + object + segChar;
+				}else{
+					str +=  object ;
+				}
+				
+				
 				if (i < set.size() - 1) {
 					str += ",";
 				}

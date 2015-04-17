@@ -17,7 +17,6 @@ import com.zhongying.huanan.product.echarts.util.EChartsUtil;
 import com.zhongying.huanan.product.redmine.util.DBConn;
 import com.zhongying.huanan.product.redmine.util.ReadFile;
 import com.zhongying.huanan.product.redmine.util.RedmineConfig;
-import com.zhongying.huanan.product.redmine.util.ToolUtil;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -26,7 +25,7 @@ import freemarker.template.TemplateException;
 public class GenRedmineJS {
 	public static void main(String[] args) {
 
-		// UpdateRedmineIndexHTML_Month();
+		 UpdateRedmineIndexHTML_Month();
 
 		// test();
 	}
@@ -87,6 +86,26 @@ public class GenRedmineJS {
 			// ========================================总量成分堆积===============================
 			// paramMap = loadIndexUserTotalBarItem(prop, con);
 			// buildStandCharts("index_user_total_bar_item","", paramMap);
+			
+			GenRedmineService service = new GenRedmineService();
+
+			String projectids=service.queryTopProjectIds(6, prop, con);
+			
+			Properties topProjectTrace=new Properties();
+			topProjectTrace=(Properties) prop.clone();
+			
+			topProjectTrace.put("projectLimit", projectids);
+			
+			 paramMap = loadIndexProjectBarItem(prop, con);
+			 buildStandCharts("index_project_trace_bar_item","", paramMap);
+				
+			 paramMap = loadIndexProjectUserBarItem(prop, con);
+			 buildStandCharts("index_project_user_bar_item","", paramMap);
+				
+			
+			 paramMap = loadIndexCaseFromReasonBarItem(topProjectTrace, con);
+			 buildStandCharts("index_case_fromreason_bar_item","", paramMap);
+			
 
 			buildIndexMainJS(OutputDIR, TemplateDIR);
 
@@ -97,8 +116,8 @@ public class GenRedmineJS {
 		}
 	}
 
-	public static void buildIndexMainJS(String OutputDIR, String TemplateDIR) {
 
+	public static void buildIndexMainJS(String OutputDIR, String TemplateDIR) {
 		String ChartName = "index_main";
 		String TEMPLATENAME = ChartName + ".ftl";
 
@@ -109,7 +128,13 @@ public class GenRedmineJS {
 		chartsList.add("index_trace_pie");
 		chartsList.add("index_project_pie");
 		chartsList.add("index_project_pie_numbers");
-
+		chartsList.add("index_project_trace_bar_item");
+		chartsList.add("index_project_user_bar_item");
+		
+		chartsList.add("index_project_casefrom_bar_item");
+		
+		chartsList.add("index_case_fromreason_bar_item");
+		
 		chartsList.add("index_user_total_bar_item");
 
 		chartsList.add("index_user_trace_bar");
@@ -125,7 +150,7 @@ public class GenRedmineJS {
 		connect.put("source", "index_user_total_bar_item" + "_chart");
 		connect.put("target", "index_trace_pie" + "_chart");
 
-		connectList.add(connect);
+		//connectList.add(connect);
 
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("chartsList", chartsList);
@@ -229,7 +254,7 @@ public class GenRedmineJS {
 	}
 
 	/**
-	 * 加载数据loadIndexUserTotalBar 总量合格率
+	 * 加载数据loadIndexProjectBarItem 
 	 * 
 	 * @param beginDate
 	 * @param endDate
@@ -254,31 +279,31 @@ public class GenRedmineJS {
 		index_user_bar_item_yAxis += "}";
 		index_user_bar_item_yAxis += "}";
 
-		System.err.println("loadIndexTopProjectBarItem  query data begin ....");
+		System.out.println("loadIndexTopProjectBarItem  query data begin ....");
 
 		GenRedmineService service = new GenRedmineService();
 
-		
-
-		LinkedList userList = service.queryUserList(prop, con);
-		index_user_bar_item_usernames = convertListToString(userList, "'");
-
 		HashMap userhoursMap = service.queryProjectTraceHours(prop, con);
-		
-		index_user_bar_item_keys =(String)userhoursMap.get("project_names");
 
-		System.err.println("loadIndexTopProjectBarItem  query data finished ....");
+		index_user_bar_item_keys = (String) userhoursMap.get("project_names");
+
+		index_user_bar_item_usernames = (String) userhoursMap.get("trace_names");
+
+		System.out.println("loadIndexTopProjectBarItem  query data finished ....");
 
 		int rgba1 = 80;
 		int rgba2 = 120;
-		int rgba3 = 52;
+		int rgba3 = 2;
 		int rgba4 = 1;
 
 		List<Map> lineList = new ArrayList<Map>();
 
-		for (int j = 0; j < traceList.size(); j++) {
+		String[] projectList = index_user_bar_item_keys.replace("'","").split(",");
+		String[] traceList = index_user_bar_item_usernames.replace("'","").split(",");
 
-			String tracename = (String) traceList.get(j);
+		for (int j = 0; j < traceList.length; j++) {
+
+			String tracename = (String) traceList[j];
 
 			index_user_bar_item_yAxis += ",{";
 			index_user_bar_item_yAxis += "type : 'value',";
@@ -309,30 +334,30 @@ public class GenRedmineJS {
 
 			rgba1 += 100;
 			rgba2 += 80;
-			rgba3 += 50;
-			rgba4 += 40;
+			//rgba3 += 50;
+			//rgba4 += 40;
 
 			thisNodeData += "   \n data:[";
 
 			String lineDataValues = "";
 
-			for (int i = 0; i < userList.size(); i++) {
-				String username = (String) userList.get(i);
+			for (int i = 0; i < projectList.length; i++) {
+				String projectname = projectList[i];
 
-				String hours = (String) userhoursMap.get(username + tracename + "totalhours");
+				String hours = (String) userhoursMap.get( projectname+tracename + "totalhours");
 				if (hours == null || "".equals(hours)) {
 					hours = "0";
 				}
 
 				thisNodeData += hours;
 
-				String nums = (String) userhoursMap.get(username + tracename + "totalnums");
+				String nums = (String) userhoursMap.get( projectname+tracename + "totalnums");
 				if (nums == null || "".equals(nums)) {
 					nums = "0";
 				}
 				lineDataValues += nums;
 
-				if (i < userList.size() - 1) {
+				if (i < projectList.length - 1) {
 					thisNodeData += ",";
 					lineDataValues += ",";
 
@@ -352,13 +377,152 @@ public class GenRedmineJS {
 			lineData += "]";
 			lineData += "} \n";
 
-			if (j < traceList.size() - 1) {
+			if (j < traceList.length - 1) {
 				thisNodeData += ",";
 
 				lineData += ",";
 			} else {
 				lineData = "," + lineData;
 			}
+
+			index_user_bar_item_data += thisNodeData;
+			index_user_bar_item_data += lineData;
+
+		}
+
+		paramMap.put("index_user_total_bar_item_name", index_user_bar_item_name);
+		paramMap.put("index_user_total_bar_item_keys", index_user_bar_item_keys);
+		paramMap.put("index_user_total_bar_item_usernames", index_user_bar_item_usernames);
+
+		paramMap.put("index_user_bar_item_yAxis", index_user_bar_item_yAxis);
+		paramMap.put("index_user_total_bar_item_data", index_user_bar_item_data);
+
+		return paramMap;
+	}
+	
+	public static Map<String, Object> loadIndexProjectUserBarItem(Properties prop, Connection con) throws Exception {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+
+		String index_user_bar_item_name = "项目人员";
+		String index_user_bar_item_usernames = "";
+		String index_user_bar_item_keys = "";
+		String index_user_bar_item_data = "";
+		String index_user_bar_item_yAxis = "";
+
+		index_user_bar_item_yAxis += "{";
+		index_user_bar_item_yAxis += "type : 'value',";
+		index_user_bar_item_yAxis += "name : '总工时',";
+		index_user_bar_item_yAxis += "axisLabel : {";
+		index_user_bar_item_yAxis += "formatter : '{value} h'";
+		index_user_bar_item_yAxis += "}";
+		index_user_bar_item_yAxis += "}";
+
+		System.out.println("loadIndexTopProjectBarItem  query data begin ....");
+
+		GenRedmineService service = new GenRedmineService();
+
+		HashMap userhoursMap = service.queryProjectUserHours(prop, con);
+
+		index_user_bar_item_keys = (String) userhoursMap.get("project_names");
+
+		index_user_bar_item_usernames = (String) userhoursMap.get("user_names");
+
+		System.out.println("loadIndexTopProjectBarItem  query data finished ....");
+
+		int rgba1 = 80;
+		int rgba2 = 80;
+		int rgba3 = 2;
+		int rgba4 = 1;
+
+		List<Map> lineList = new ArrayList<Map>();
+
+		String[] projectList = index_user_bar_item_keys.replace("'","").split(",");
+		String[] traceList = index_user_bar_item_usernames.replace("'","").split(",");
+
+		for (int j = 0; j < traceList.length; j++) {
+
+			String tracename = (String) traceList[j];
+
+			index_user_bar_item_yAxis += ",{";
+			index_user_bar_item_yAxis += "type : 'value',";
+			index_user_bar_item_yAxis += "name : '数量',";
+			index_user_bar_item_yAxis += "axisLabel : {";
+			index_user_bar_item_yAxis += "formatter : '{value} 个'";
+			index_user_bar_item_yAxis += "}";
+			index_user_bar_item_yAxis += "}";
+
+			String thisNodeData = "{ \n";
+			thisNodeData += " name:'" + tracename + "',";
+			thisNodeData += " type:'bar',";
+			thisNodeData += "   tooltip : {trigger: 'item'},";
+			thisNodeData += "    stack: '总工时',";
+			thisNodeData += "itemStyle : {";
+			thisNodeData += "	normal : {";
+			thisNodeData += "		color : 'rgba(" + rgba1 + "," + rgba2 + "," + rgba3 + "," + rgba4 + ")',";
+			thisNodeData += "		label : {";
+			// thisNodeData += "			show : true,position:'inside',";
+			thisNodeData += "			show : false,";
+
+			thisNodeData += "			textStyle : {";
+			thisNodeData += "				color : '#27727B'";
+			thisNodeData += "			}";
+			thisNodeData += "		}";
+			thisNodeData += "	}";
+			thisNodeData += "},";
+
+			rgba1 += 50;
+			rgba2 += 40;
+			rgba3 += 20;
+			rgba4 += 10;
+
+			thisNodeData += "   \n data:[";
+
+			String lineDataValues = "";
+
+			for (int i = 0; i < projectList.length; i++) {
+				String projectname = projectList[i];
+
+				String hours = (String) userhoursMap.get( projectname+tracename + "totalhours");
+				if (hours == null || "".equals(hours)) {
+					hours = "0";
+				}
+
+				thisNodeData += hours;
+
+				String nums = (String) userhoursMap.get( projectname+tracename + "totalnums");
+				if (nums == null || "".equals(nums)) {
+					nums = "0";
+				}
+				lineDataValues += nums;
+
+				if (i < projectList.length - 1) {
+					thisNodeData += ",";
+					lineDataValues += ",";
+
+				}
+
+			}
+
+			thisNodeData += "] \n";
+			thisNodeData += "}  \n";
+
+			String lineData = "{";
+			lineData += " name:'" + tracename + "',";
+			lineData += " type:'line',";
+			lineData += "yAxisIndex: 1,";
+			lineData += "data:[";
+			lineData += lineDataValues;
+			lineData += "]";
+			lineData += "} \n";
+
+			if (j < traceList.length - 1) {
+				thisNodeData += ",";
+
+				lineData += ",";
+			} else {
+				lineData = "," + lineData;
+			}
+
 			index_user_bar_item_data += thisNodeData;
 			index_user_bar_item_data += lineData;
 
@@ -374,6 +538,302 @@ public class GenRedmineJS {
 		return paramMap;
 	}
 
+	/**
+	 * 加载数据loadIndexProjectBarItem 
+	 * 
+	 * @param beginDate
+	 * @param endDate
+	 * @param con
+	 * @return
+	 * @throws Exception
+	 */
+	public static Map<String, Object> loadIndexProjectCaseFromBarItem(Properties prop, Connection con) throws Exception {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+
+		String index_user_bar_item_name = "CASE来源";
+		String index_user_bar_item_usernames = "";
+		String index_user_bar_item_keys = "";
+		String index_user_bar_item_data = "";
+		String index_user_bar_item_yAxis = "";
+
+		index_user_bar_item_yAxis += "{";
+		index_user_bar_item_yAxis += "type : 'value',";
+		index_user_bar_item_yAxis += "name : '总工时',";
+		index_user_bar_item_yAxis += "axisLabel : {";
+		index_user_bar_item_yAxis += "formatter : '{value} h'";
+		index_user_bar_item_yAxis += "}";
+		index_user_bar_item_yAxis += "}";
+
+		System.out.println("loadIndexTopProjectBarItem  query data begin ....");
+
+		GenRedmineService service = new GenRedmineService();
+
+		HashMap userhoursMap = service.queryProjectCaseFrom(prop, con);
+
+		index_user_bar_item_keys = (String) userhoursMap.get("project_names");
+
+		index_user_bar_item_usernames = (String) userhoursMap.get("case_froms");
+
+		System.out.println("loadIndexTopProjectBarItem  query data finished ....");
+
+		int rgba1 = 40;
+		int rgba2 = 80;
+		int rgba3 = 2;
+		int rgba4 = 1;
+
+		List<Map> lineList = new ArrayList<Map>();
+
+		String[] projectList = index_user_bar_item_keys.replace("'","").split(",");
+		String[] traceList = index_user_bar_item_usernames.replace("'","").split(",");
+
+		for (int j = 0; j < traceList.length; j++) {
+
+			String tracename = (String) traceList[j];
+
+			index_user_bar_item_yAxis += ",{";
+			index_user_bar_item_yAxis += "type : 'value',";
+			index_user_bar_item_yAxis += "name : '数量',";
+			index_user_bar_item_yAxis += "axisLabel : {";
+			index_user_bar_item_yAxis += "formatter : '{value} 个'";
+			index_user_bar_item_yAxis += "}";
+			index_user_bar_item_yAxis += "}";
+
+			String thisNodeData = "{ \n";
+			thisNodeData += " name:'" + tracename + "',";
+			thisNodeData += " type:'bar',";
+			thisNodeData += "   tooltip : {trigger: 'item'},";
+			thisNodeData += "    stack: '总工时',";
+			thisNodeData += "itemStyle : {";
+			thisNodeData += "	normal : {";
+			thisNodeData += "		color : 'rgba(" + rgba1 + "," + rgba2 + "," + rgba3 + "," + rgba4 + ")',";
+			thisNodeData += "		label : {";
+			// thisNodeData += "			show : true,position:'inside',";
+			thisNodeData += "			show : false,";
+
+			thisNodeData += "			textStyle : {";
+			thisNodeData += "				color : '#27727B'";
+			thisNodeData += "			}";
+			thisNodeData += "		}";
+			thisNodeData += "	}";
+			thisNodeData += "},";
+
+			rgba1 += 25;
+			rgba2 += 40;
+			rgba3 += 5;
+			rgba4 += 4;
+
+			thisNodeData += "   \n data:[";
+
+			String lineDataValues = "";
+
+			for (int i = 0; i < projectList.length; i++) {
+				String projectname = projectList[i];
+
+				String hours = (String) userhoursMap.get( projectname+tracename + "totalhours");
+				if (hours == null || "".equals(hours)) {
+					hours = "0";
+				}
+
+				thisNodeData += hours;
+
+				String nums = (String) userhoursMap.get( projectname+tracename + "totalnums");
+				if (nums == null || "".equals(nums)) {
+					nums = "0";
+				}
+				lineDataValues += nums;
+
+				if (i < projectList.length - 1) {
+					thisNodeData += ",";
+					lineDataValues += ",";
+
+				}
+
+			}
+
+			thisNodeData += "] \n";
+			thisNodeData += "}  \n";
+
+			String lineData = "{";
+			lineData += " name:'" + tracename + "',";
+			lineData += " type:'line',";
+			lineData += "yAxisIndex: 1,";
+			lineData += "data:[";
+			lineData += lineDataValues;
+			lineData += "]";
+			lineData += "} \n";
+
+			if (j < traceList.length - 1) {
+				thisNodeData += ",";
+
+				lineData += ",";
+			} else {
+				lineData = "," + lineData;
+			}
+
+			index_user_bar_item_data += thisNodeData;
+			index_user_bar_item_data += lineData;
+
+		}
+
+		paramMap.put("index_user_total_bar_item_name", index_user_bar_item_name);
+		paramMap.put("index_user_total_bar_item_keys", index_user_bar_item_keys);
+		paramMap.put("index_user_total_bar_item_usernames", index_user_bar_item_usernames);
+
+		paramMap.put("index_user_bar_item_yAxis", index_user_bar_item_yAxis);
+		paramMap.put("index_user_total_bar_item_data", index_user_bar_item_data);
+
+		return paramMap;
+	}
+
+	
+	/**
+	 * 加载数据loadIndexProjectBarItem 
+	 * 
+	 * @param beginDate
+	 * @param endDate
+	 * @param con
+	 * @return
+	 * @throws Exception
+	 */
+	public static Map<String, Object> loadIndexCaseFromReasonBarItem(Properties prop, Connection con) throws Exception {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+
+		String index_user_bar_item_name = "CASE原因";
+		String index_user_bar_item_usernames = "";
+		String index_user_bar_item_keys = "";
+		String index_user_bar_item_data = "";
+		String index_user_bar_item_yAxis = "";
+
+		index_user_bar_item_yAxis += "{";
+		index_user_bar_item_yAxis += "type : 'value',";
+		index_user_bar_item_yAxis += "name : '总工时',";
+		index_user_bar_item_yAxis += "axisLabel : {";
+		index_user_bar_item_yAxis += "formatter : '{value} h'";
+		index_user_bar_item_yAxis += "}";
+		index_user_bar_item_yAxis += "}";
+
+		System.out.println("loadIndexTopProjectBarItem  query data begin ....");
+
+		GenRedmineService service = new GenRedmineService();
+
+		HashMap userhoursMap = service.queryCaseFromReason(prop, con);
+
+		index_user_bar_item_keys = (String) userhoursMap.get("case_froms");
+
+		index_user_bar_item_usernames = (String) userhoursMap.get("case_reasons");
+
+		System.out.println("loadIndexTopProjectBarItem  query data finished ....");
+
+		int rgba1 = 40;
+		int rgba2 = 80;
+		int rgba3 = 2;
+		int rgba4 = 1;
+
+		List<Map> lineList = new ArrayList<Map>();
+
+		String[] projectList = index_user_bar_item_keys.replace("'","").split(",");
+		String[] traceList = index_user_bar_item_usernames.replace("'","").split(",");
+
+		for (int j = 0; j < traceList.length; j++) {
+
+			String tracename = (String) traceList[j];
+
+			index_user_bar_item_yAxis += ",{";
+			index_user_bar_item_yAxis += "type : 'value',";
+			index_user_bar_item_yAxis += "name : '数量',";
+			index_user_bar_item_yAxis += "axisLabel : {";
+			index_user_bar_item_yAxis += "formatter : '{value} 个'";
+			index_user_bar_item_yAxis += "}";
+			index_user_bar_item_yAxis += "}";
+
+			String thisNodeData = "{ \n";
+			thisNodeData += " name:'" + tracename + "',";
+			thisNodeData += " type:'bar',";
+			thisNodeData += "   tooltip : {trigger: 'item'},";
+			thisNodeData += "    stack: '总工时',";
+			thisNodeData += "itemStyle : {";
+			thisNodeData += "	normal : {";
+			thisNodeData += "		color : 'rgba(" + rgba1 + "," + rgba2 + "," + rgba3 + "," + rgba4 + ")',";
+			thisNodeData += "		label : {";
+			// thisNodeData += "			show : true,position:'inside',";
+			thisNodeData += "			show : false,";
+
+			thisNodeData += "			textStyle : {";
+			thisNodeData += "				color : '#27727B'";
+			thisNodeData += "			}";
+			thisNodeData += "		}";
+			thisNodeData += "	}";
+			thisNodeData += "},";
+
+			rgba1 += 25;
+			rgba2 += 40;
+			rgba3 += 5;
+			rgba4 += 4;
+
+			thisNodeData += "   \n data:[";
+
+			String lineDataValues = "";
+
+			for (int i = 0; i < projectList.length; i++) {
+				String projectname = projectList[i];
+
+				String hours = (String) userhoursMap.get( projectname+tracename + "totalhours");
+				if (hours == null || "".equals(hours)) {
+					hours = "0";
+				}
+
+				thisNodeData += hours;
+
+				String nums = (String) userhoursMap.get( projectname+tracename + "totalnums");
+				if (nums == null || "".equals(nums)) {
+					nums = "0";
+				}
+				lineDataValues += nums;
+
+				if (i < projectList.length - 1) {
+					thisNodeData += ",";
+					lineDataValues += ",";
+
+				}
+
+			}
+
+			thisNodeData += "] \n";
+			thisNodeData += "}  \n";
+
+			String lineData = "{";
+			lineData += " name:'" + tracename + "',";
+			lineData += " type:'line',";
+			lineData += "yAxisIndex: 1,";
+			lineData += "data:[";
+			lineData += lineDataValues;
+			lineData += "]";
+			lineData += "} \n";
+
+			if (j < traceList.length - 1) {
+				thisNodeData += ",";
+
+				lineData += ",";
+			} else {
+				lineData = "," + lineData;
+			}
+
+			index_user_bar_item_data += thisNodeData;
+			index_user_bar_item_data += lineData;
+
+		}
+
+		paramMap.put("index_user_total_bar_item_name", index_user_bar_item_name);
+		paramMap.put("index_user_total_bar_item_keys", index_user_bar_item_keys);
+		paramMap.put("index_user_total_bar_item_usernames", index_user_bar_item_usernames);
+
+		paramMap.put("index_user_bar_item_yAxis", index_user_bar_item_yAxis);
+		paramMap.put("index_user_total_bar_item_data", index_user_bar_item_data);
+
+		return paramMap;
+	}
+
+	
 	/**
 	 * 加载数据loadIndexTracetPie
 	 * 
@@ -796,26 +1256,4 @@ public class GenRedmineJS {
 		return 0;
 	}
 
-	public static void test() {
-
-		Connection con = null;
-		try {
-			System.err.println("-----0-----" + ToolUtil.getAccurateTime());
-
-			DBConn db = new DBConn();
-			con = db.getDirectConn();
-
-			GenRedmineService service = new GenRedmineService();
-
-			String sql = "select * from users where type='User' ";
-			service.test(sql, con);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DBConn.releaseConnection(con);// /释放
-		}
-	}
-
-	
 }
