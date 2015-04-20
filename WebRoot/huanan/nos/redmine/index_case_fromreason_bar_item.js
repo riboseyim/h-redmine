@@ -11,7 +11,7 @@ function index_case_fromreason_bar_item_option() {
 			trigger : 'axis'
 		},
 		legend : {
-			data : ['系统可靠性','程序bug','数据核查','待确定','易用性不足','人为误操作','无','第三方问题','配置核查']
+			data : ['系统可靠性','程序bug','数据核查','待确定','易用性不足','用户侧问题','人为误操作','无','第三方问题','配置核查']
 		},
 		toolbox : {
 			show : true,
@@ -64,12 +64,12 @@ function index_case_fromreason_bar_item_option() {
 			},
 			data : [ 'Line', 'Bar', 'Scatter', 'K', 'Map' ]
 		} ],
-		yAxis : [{type : 'value',name : '总工时',axisLabel : {formatter : '{value} h'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}}],
+		yAxis : [{type : 'value',name : '总工时',axisLabel : {formatter : '{value} h'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}},{type : 'value',name : '数量',axisLabel : {formatter : '{value} 个'}}],
 		series : [{ 
  name:'系统可靠性', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(40,80,2,1)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
- data:[0,0,0,0,0,0,0,0,0,0,0,0,11.0,0,0,0,0,0] 
+ data:[0,0,0,0,0,0,3.0,0,0,0,0,0,11.0,0,0,0,0,0] 
 }  
-,{ name:'系统可靠性', type:'line',yAxisIndex: 1,data:[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0]} 
+,{ name:'系统可靠性', type:'line',yAxisIndex: 1,data:[0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0]} 
 ,{ 
  name:'程序bug', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(65,120,7,5)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
  data:[0,0,0,0,3.0,0,0,0,0,3.0,0,0,0,1.5,6.0,1.0,0,0] 
@@ -77,36 +77,41 @@ function index_case_fromreason_bar_item_option() {
 ,{ name:'程序bug', type:'line',yAxisIndex: 1,data:[0,0,0,0,3,0,0,0,0,1,0,0,0,1,3,1,0,0]} 
 ,{ 
  name:'数据核查', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(90,160,12,9)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
- data:[0,0,8.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] 
+ data:[0,0,11.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] 
 }  
-,{ name:'数据核查', type:'line',yAxisIndex: 1,data:[0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]} 
+,{ name:'数据核查', type:'line',yAxisIndex: 1,data:[0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]} 
 ,{ 
  name:'待确定', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(115,200,17,13)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
- data:[0,0,0,16.0,0,0,0,0,0,0,0,7.5,0,0,0,0,0,0] 
+ data:[0,0,0,16.0,0,3.0,0,0,0,0,0,9.5,0,0,0,0,0,0] 
 }  
-,{ name:'待确定', type:'line',yAxisIndex: 1,data:[0,0,0,1,0,0,0,0,0,0,0,3,0,0,0,0,0,0]} 
+,{ name:'待确定', type:'line',yAxisIndex: 1,data:[0,0,0,1,0,1,0,0,0,0,0,3,0,0,0,0,0,0]} 
 ,{ 
  name:'易用性不足', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(140,240,22,17)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
  data:[0,24.0,12.0,0,6.0,2.0,0,0,15.0,0,1.5,0,0,0,0,0,0,0] 
 }  
-,{ name:'易用性不足', type:'line',yAxisIndex: 1,data:[0,5,4,0,2,2,0,0,7,0,2,0,0,0,0,0,0,0]} 
+,{ name:'易用性不足', type:'line',yAxisIndex: 1,data:[0,5,4,0,2,1,0,0,7,0,2,0,0,0,0,0,0,0]} 
 ,{ 
- name:'人为误操作', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(165,280,27,21)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
+ name:'用户侧问题', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(165,280,27,21)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
+ data:[0,0,0,2.0,0,0,0,0,1.0,0,0,0,0,1.0,0,0,0,0] 
+}  
+,{ name:'用户侧问题', type:'line',yAxisIndex: 1,data:[0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0]} 
+,{ 
+ name:'人为误操作', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(190,320,32,25)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
  data:[0,0,0,0,0,0,13.0,0,0,0,0,0,0,0,0,0,0,3.0] 
 }  
 ,{ name:'人为误操作', type:'line',yAxisIndex: 1,data:[0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,2]} 
 ,{ 
- name:'无', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(190,320,32,25)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
- data:[0,0,1.0,0,0,4.5,0,0,0,0,0,0,0,0,5.0,4.0,7.5,0] 
+ name:'无', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(215,360,37,29)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
+ data:[0,0,1.0,0,8.5,4.5,0,0,0,1.5,0,0,0,0,5.0,4.0,7.5,0] 
 }  
-,{ name:'无', type:'line',yAxisIndex: 1,data:[0,0,1,0,0,3,0,0,0,0,0,0,0,0,2,3,4,0]} 
+,{ name:'无', type:'line',yAxisIndex: 1,data:[0,0,1,0,3,3,0,0,0,1,0,0,0,0,2,3,4,0]} 
 ,{ 
- name:'第三方问题', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(215,360,37,29)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
- data:[0,0,0,0,0,0,0,1.0,0,0,0,0,0,0,2.5,0,0,0] 
+ name:'第三方问题', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(240,400,42,33)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
+ data:[0,0,0,0,0,0,0,1.0,0,0,0,2.5,0,0,0,0,0,0] 
 }  
-,{ name:'第三方问题', type:'line',yAxisIndex: 1,data:[0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0]} 
+,{ name:'第三方问题', type:'line',yAxisIndex: 1,data:[0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]} 
 ,{ 
- name:'配置核查', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(240,400,42,33)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
+ name:'配置核查', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(265,440,47,37)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
  data:[2.0,0,0,0,2.0,8.0,0,0,1.5,0,2.0,0,0,0,0,0,0,0] 
 }  
 ,{ name:'配置核查', type:'line',yAxisIndex: 1,data:[1,0,0,0,1,4,0,0,1,0,1,0,0,0,0,0,0,0]} 

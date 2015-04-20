@@ -30,11 +30,18 @@ function refresh(isBtnRefresh) {
 			${chartName}_chart.dispose();
 		}
 		
-		${chartName}_chart = echarts.init(${chartName}_div, curTheme);
+		${chartName}_chart = echarts.init(${chartName}_div, curTheme).showLoading({effect:'bubble'});;
 	
+	</#list>	
+	
+	
+	<#list chartsList as chartName> 
 		${chartName}_chart.setOption(${chartName}_option());
 	</#list>	
 	
+	<#list chartsList as chartName> 
+		${chartName}_chart.hideLoading();
+	</#list>	
 	
 	<#list connectList as connect> 
 		${connect["source"]}.connect(${connect["target"]});

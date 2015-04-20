@@ -7,8 +7,6 @@
 	var index_project_casefrom_bar_item_chart;
 	var index_case_fromreason_bar_item_chart;
 	var index_user_total_bar_item_chart;
-	var index_user_trace_bar_chart;
-	var index_user_total_bar_chart;
 
 function requireCallback(ec, defaultTheme) {
 	curTheme = themeSelector ? defaultTheme : {};
@@ -31,91 +29,83 @@ function refresh(isBtnRefresh) {
 			index_trace_pie_chart.dispose();
 		}
 		
-		index_trace_pie_chart = echarts.init(index_trace_pie_div, curTheme);
+		index_trace_pie_chart = echarts.init(index_trace_pie_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_trace_pie_chart.setOption(index_trace_pie_option());
 		var index_project_pie_div = document.getElementById("index_project_pie_div");
 		
 		if (index_project_pie_chart && index_project_pie_chart.dispose) {
 			index_project_pie_chart.dispose();
 		}
 		
-		index_project_pie_chart = echarts.init(index_project_pie_div, curTheme);
+		index_project_pie_chart = echarts.init(index_project_pie_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_project_pie_chart.setOption(index_project_pie_option());
 		var index_project_pie_numbers_div = document.getElementById("index_project_pie_numbers_div");
 		
 		if (index_project_pie_numbers_chart && index_project_pie_numbers_chart.dispose) {
 			index_project_pie_numbers_chart.dispose();
 		}
 		
-		index_project_pie_numbers_chart = echarts.init(index_project_pie_numbers_div, curTheme);
+		index_project_pie_numbers_chart = echarts.init(index_project_pie_numbers_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_project_pie_numbers_chart.setOption(index_project_pie_numbers_option());
 		var index_project_trace_bar_item_div = document.getElementById("index_project_trace_bar_item_div");
 		
 		if (index_project_trace_bar_item_chart && index_project_trace_bar_item_chart.dispose) {
 			index_project_trace_bar_item_chart.dispose();
 		}
 		
-		index_project_trace_bar_item_chart = echarts.init(index_project_trace_bar_item_div, curTheme);
+		index_project_trace_bar_item_chart = echarts.init(index_project_trace_bar_item_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_project_trace_bar_item_chart.setOption(index_project_trace_bar_item_option());
 		var index_project_user_bar_item_div = document.getElementById("index_project_user_bar_item_div");
 		
 		if (index_project_user_bar_item_chart && index_project_user_bar_item_chart.dispose) {
 			index_project_user_bar_item_chart.dispose();
 		}
 		
-		index_project_user_bar_item_chart = echarts.init(index_project_user_bar_item_div, curTheme);
+		index_project_user_bar_item_chart = echarts.init(index_project_user_bar_item_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_project_user_bar_item_chart.setOption(index_project_user_bar_item_option());
 		var index_project_casefrom_bar_item_div = document.getElementById("index_project_casefrom_bar_item_div");
 		
 		if (index_project_casefrom_bar_item_chart && index_project_casefrom_bar_item_chart.dispose) {
 			index_project_casefrom_bar_item_chart.dispose();
 		}
 		
-		index_project_casefrom_bar_item_chart = echarts.init(index_project_casefrom_bar_item_div, curTheme);
+		index_project_casefrom_bar_item_chart = echarts.init(index_project_casefrom_bar_item_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_project_casefrom_bar_item_chart.setOption(index_project_casefrom_bar_item_option());
 		var index_case_fromreason_bar_item_div = document.getElementById("index_case_fromreason_bar_item_div");
 		
 		if (index_case_fromreason_bar_item_chart && index_case_fromreason_bar_item_chart.dispose) {
 			index_case_fromreason_bar_item_chart.dispose();
 		}
 		
-		index_case_fromreason_bar_item_chart = echarts.init(index_case_fromreason_bar_item_div, curTheme);
+		index_case_fromreason_bar_item_chart = echarts.init(index_case_fromreason_bar_item_div, curTheme).showLoading({effect:'bubble'});;
 	
-		index_case_fromreason_bar_item_chart.setOption(index_case_fromreason_bar_item_option());
 		var index_user_total_bar_item_div = document.getElementById("index_user_total_bar_item_div");
 		
 		if (index_user_total_bar_item_chart && index_user_total_bar_item_chart.dispose) {
 			index_user_total_bar_item_chart.dispose();
 		}
 		
-		index_user_total_bar_item_chart = echarts.init(index_user_total_bar_item_div, curTheme);
+		index_user_total_bar_item_chart = echarts.init(index_user_total_bar_item_div, curTheme).showLoading({effect:'bubble'});;
 	
+	
+	
+		index_trace_pie_chart.setOption(index_trace_pie_option());
+		index_project_pie_chart.setOption(index_project_pie_option());
+		index_project_pie_numbers_chart.setOption(index_project_pie_numbers_option());
+		index_project_trace_bar_item_chart.setOption(index_project_trace_bar_item_option());
+		index_project_user_bar_item_chart.setOption(index_project_user_bar_item_option());
+		index_project_casefrom_bar_item_chart.setOption(index_project_casefrom_bar_item_option());
+		index_case_fromreason_bar_item_chart.setOption(index_case_fromreason_bar_item_option());
 		index_user_total_bar_item_chart.setOption(index_user_total_bar_item_option());
-		var index_user_trace_bar_div = document.getElementById("index_user_trace_bar_div");
-		
-		if (index_user_trace_bar_chart && index_user_trace_bar_chart.dispose) {
-			index_user_trace_bar_chart.dispose();
-		}
-		
-		index_user_trace_bar_chart = echarts.init(index_user_trace_bar_div, curTheme);
 	
-		index_user_trace_bar_chart.setOption(index_user_trace_bar_option());
-		var index_user_total_bar_div = document.getElementById("index_user_total_bar_div");
-		
-		if (index_user_total_bar_chart && index_user_total_bar_chart.dispose) {
-			index_user_total_bar_chart.dispose();
-		}
-		
-		index_user_total_bar_chart = echarts.init(index_user_total_bar_div, curTheme);
-	
-		index_user_total_bar_chart.setOption(index_user_total_bar_option());
-	
+		index_trace_pie_chart.hideLoading();
+		index_project_pie_chart.hideLoading();
+		index_project_pie_numbers_chart.hideLoading();
+		index_project_trace_bar_item_chart.hideLoading();
+		index_project_user_bar_item_chart.hideLoading();
+		index_project_casefrom_bar_item_chart.hideLoading();
+		index_case_fromreason_bar_item_chart.hideLoading();
+		index_user_total_bar_item_chart.hideLoading();
 	
 		index_trace_pie_chart.connect(index_user_total_bar_item_chart);
 }

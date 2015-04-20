@@ -6,7 +6,7 @@ index-project-pie-option.ftl
 create:2015-04-13
 -->
 
-function index_project_pie_${ChartsIndex}_option(){
+function index_project_pie_option(){
 	
 	var option  = {
 		    title : {

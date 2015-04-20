@@ -62,16 +62,16 @@ public class GenRedmineJS {
 
 			// =================================================================================
 
-			// paramMap = loadIndexProjectPie(prop, con);
-			// buildStandCharts("index_project_pie","",paramMap);
+			 paramMap = loadIndexProjectPie(prop, con);
+			 buildStandCharts("index_project_pie","",paramMap);
 
-			// paramMap = loadIndexProjectPieNums(prop, con);
-			// paramMap.put("index_project_pie_name", "项目任务数");
-			// buildStandCharts("index_project_pie_numbers","",paramMap);
+			 paramMap = loadIndexProjectPieNums(prop, con);
+			 paramMap.put("index_project_pie_name", "项目任务数");
+			 buildStandCharts("index_project_pie_numbers","",paramMap);
 
 			// =================================================================================
-			// paramMap = loadIndexTracePie(prop, con);
-			// buildStandCharts("index_trace_pie","", paramMap);
+			 paramMap = loadIndexTracePie(prop, con);
+			 buildStandCharts("index_trace_pie","", paramMap);
 
 			// =================================================================================
 
@@ -84,8 +84,8 @@ public class GenRedmineJS {
 			// buildStandCharts("index_user_total_bar","", paramMap);
 
 			// ========================================总量成分堆积===============================
-			// paramMap = loadIndexUserTotalBarItem(prop, con);
-			// buildStandCharts("index_user_total_bar_item","", paramMap);
+			 paramMap = loadIndexUserTotalBarItem(prop, con);
+			 buildStandCharts("index_user_total_bar_item","", paramMap);
 			
 			GenRedmineService service = new GenRedmineService();
 
@@ -137,8 +137,8 @@ public class GenRedmineJS {
 		
 		chartsList.add("index_user_total_bar_item");
 
-		chartsList.add("index_user_trace_bar");
-		chartsList.add("index_user_total_bar");
+		//chartsList.add("index_user_trace_bar");
+		//chartsList.add("index_user_total_bar");
 
 		List<Map> connectList = new ArrayList<Map>();
 		HashMap connect = new HashMap();
