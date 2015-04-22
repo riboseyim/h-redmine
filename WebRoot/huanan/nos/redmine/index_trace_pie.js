@@ -48,7 +48,7 @@ function index_trace_pie_option(){
 		            type:'pie',
 		            radius : '55%',
 		            center: ['50%', '60%'],
-		            data:[{value:456.5,name:'实施流程'},{value:370.0,name:'开发流程'},{value:321.5,name:'CASE流程'},{value:16.5,name:'内部流程'}
+		            data:[{value:456.5,name:'实施流程'},{value:370.0,name:'开发流程'},{value:323.5,name:'CASE流程'},{value:16.5,name:'内部流程'}
 		            ]
 		        }
 		    ]

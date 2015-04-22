@@ -13,7 +13,7 @@ function index_project_pie_numbers_option(){
 		    legend: {
 		        orient : 'vertical',
 		        x : 'right',
-		        data:['广东电信IP网管','广西电信PON网管','广西电信IP网管','云南电信IP网管','广西电信IPRAN网管','福建电信IP网管','广东移动局数据系统','广西电信智能提速平台','协同平台','广西联通测速平台','福建电信IPRAN网管','福建电信IDC网管','广西联通IP网管','广东铁通IP网管','内部培训&招聘','广西电信测速平台','集中运维专项','新技术研究探索','广东电信IDC网管']
+		        data:['广东电信IP网管','广西电信PON网管','广西电信IP网管','云南电信IP网管','广西电信IPRAN网管','福建电信IP网管','广东移动局数据系统','广西电信智能提速平台','协同平台','广西联通测速平台','福建电信IPRAN网管','福建电信IDC网管','广西联通IP网管','广东铁通IP网管','集中运维专项','内部培训&招聘','广西电信测速平台','新技术研究探索','广东电信IDC网管']
 		    },
 		    toolbox: {
 		        show : true,
@@ -44,7 +44,7 @@ function index_project_pie_numbers_option(){
 		            type:'pie',
 		            radius : '55%',
 		            center: ['50%', '60%'],
-		            data:[{value:76,name:'广东电信IP网管'},{value:41,name:'广西电信PON网管'},{value:61,name:'广西电信IP网管'},{value:32,name:'云南电信IP网管'},{value:33,name:'广西电信IPRAN网管'},{value:20,name:'福建电信IP网管'},{value:22,name:'广东移动局数据系统'},{value:19,name:'广西电信智能提速平台'},{value:4,name:'协同平台'},{value:6,name:'广西联通测速平台'},{value:6,name:'福建电信IPRAN网管'},{value:4,name:'福建电信IDC网管'},{value:8,name:'广西联通IP网管'},{value:6,name:'广东铁通IP网管'},{value:1,name:'内部培训&招聘'},{value:1,name:'广西电信测速平台'},{value:2,name:'集中运维专项'},{value:1,name:'新技术研究探索'},{value:1,name:'广东电信IDC网管'}
+		            data:[{value:76,name:'广东电信IP网管'},{value:41,name:'广西电信PON网管'},{value:61,name:'广西电信IP网管'},{value:32,name:'云南电信IP网管'},{value:33,name:'广西电信IPRAN网管'},{value:20,name:'福建电信IP网管'},{value:22,name:'广东移动局数据系统'},{value:19,name:'广西电信智能提速平台'},{value:4,name:'协同平台'},{value:6,name:'广西联通测速平台'},{value:7,name:'福建电信IPRAN网管'},{value:4,name:'福建电信IDC网管'},{value:8,name:'广西联通IP网管'},{value:6,name:'广东铁通IP网管'},{value:2,name:'集中运维专项'},{value:1,name:'内部培训&招聘'},{value:1,name:'广西电信测速平台'},{value:1,name:'新技术研究探索'},{value:1,name:'广东电信IDC网管'}
 		            ]
 		        }
 		    ]

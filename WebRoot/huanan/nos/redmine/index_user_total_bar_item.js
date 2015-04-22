@@ -72,9 +72,9 @@ function index_user_total_bar_item_option() {
 ,{ name:'开发流程', type:'line',yAxisIndex: 1,data:[9,14,9,3,23,2,0,9,0,15,0,0,1]} 
 ,{ 
  name:'CASE流程', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(180,200,102,41)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
- data:[19.5,4.0,20.5,11.0,15.0,67.0,60.0,0,37.0,14.5,33.5,12.0,27.5] 
+ data:[19.5,4.0,22.5,11.0,15.0,67.0,60.0,0,37.0,14.5,33.5,12.0,27.5] 
 }  
-,{ name:'CASE流程', type:'line',yAxisIndex: 1,data:[5,2,10,5,7,28,33,0,5,6,16,6,12]} 
+,{ name:'CASE流程', type:'line',yAxisIndex: 1,data:[5,2,11,5,7,28,33,0,5,6,16,6,12]} 
 ,{ 
  name:'实施流程', type:'bar',   tooltip : {trigger: 'item'},    stack: '总工时',itemStyle : {	normal : {		color : 'rgba(280,280,152,81)',		label : {			show : false,			textStyle : {				color : '#27727B'			}		}	}},   
  data:[7.5,1.0,5.0,31.0,4.0,56.0,37.0,43.0,82.0,72.5,52.0,7.0,58.5] 

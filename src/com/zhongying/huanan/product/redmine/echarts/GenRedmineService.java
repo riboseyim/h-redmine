@@ -702,7 +702,6 @@ public class GenRedmineService {
 		sql += "concat(u.lastname,u.firstname) as person_name, ";
 		sql += "date_format(t.spent_on,'%Y-%m-%d') as log_date, ";
 		sql += "concat(p.name) as project_name, ";
-		sql += "concat(e.name) as log_attr, ";
 		sql += "concat(f.value) as case_from, ";
 		sql += "concat(r.value) as case_reason, ";
 
@@ -712,13 +711,12 @@ public class GenRedmineService {
 		sql += "left join issues i on i.id=t.issue_id ";
 		sql += "left join users u on u.id=t.user_id ";
 		sql += "left join trackers tr on tr.id=i.tracker_id ";
-		sql += "left join enumerations e on e.id=t.activity_id and e.active=1 ";
 		sql += "left join issue_statuses ist on ist.id=i.status_id ";
 		sql += "left join ( ";
 		sql += "select i.id,i.subject,cf.name,cv.value from custom_fields cf ";
 		sql += "left join custom_values cv on cv.custom_field_id=cf.id ";
 		sql += "left join issues i on i.id=cv.customized_id ";
-		sql += "where cf.type='IssueCustomField' and cf.name='CASEÀ´Ô´' ";
+		sql += "where cf.type='IssueCustomField' and cf.name='CASEÄ£¿é' ";
 		sql += ") f on f.id=i.id ";
 		sql += "left join ( ";
 		sql += "select i.id,i.subject,cf.name,cv.value from custom_fields cf ";

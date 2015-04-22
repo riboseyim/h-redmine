@@ -539,8 +539,8 @@ public class GenRedmineJS {
 	}
 
 	/**
-	 * 加载数据loadIndexProjectBarItem 
-	 * 
+	 * 加载数据loadIndexProjectCaseFromBarItem 
+	 * 项目-CASE模块
 	 * @param beginDate
 	 * @param endDate
 	 * @param con
@@ -550,7 +550,7 @@ public class GenRedmineJS {
 	public static Map<String, Object> loadIndexProjectCaseFromBarItem(Properties prop, Connection con) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 
-		String index_user_bar_item_name = "CASE来源";
+		String index_user_bar_item_name = "";
 		String index_user_bar_item_usernames = "";
 		String index_user_bar_item_keys = "";
 		String index_user_bar_item_data = "";
