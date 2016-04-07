@@ -44,7 +44,7 @@ public void UpdateRedmineIndexHTML(HttpServletRequest request,HttpServletRespons
     System.err.println(beginDate);
     
     GenRedmineChartsClient client = new GenRedmineChartsClient();
-    String result = client.UpdateRedmineIndexHTML(beginDate, endDate);
+    String result = client.UpdateRedmineIndexHTML_Month();
     //System.out.println(result);
     response.getWriter().write(result);
 }

@@ -11,7 +11,8 @@ function index_trace_pie_option(){
 	var option  = {
 		    title : {
 		        text: '${index_trace_pie_name}',
-		        x:'center'
+		        x:'center',
+		        y:'bottom'
 		    },
 		    tooltip : {
 		        trigger: 'item',

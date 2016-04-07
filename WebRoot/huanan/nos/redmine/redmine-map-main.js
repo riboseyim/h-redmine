@@ -17,17 +17,11 @@ function refresh(isBtnRefresh){
     needRefresh = false;
     domMessage.innerHTML = '';
     
-   // loadChinaMap();
-    loadTrackBar();
-    loadHistoryLine();
-    loadProjectBar();
+   loadChinaMap();
 }
 
 
 var myChinaMapChart;
-var myTrackBarChart;
-var myHistoryLineChart;
-var myProjectBarChart;
 
 
 //加载中国地图
@@ -60,56 +54,6 @@ function eventMapSelected(param){
      }
 }
 
-//加载跟踪标签
-function loadTrackBar(){
-
-	var trackBarDiv= document.getElementById('track-bar-div');
-	
-	 if (myTrackBarChart && myTrackBarChart.dispose) {
-		 myTrackBarChart.dispose();
-	 }
-	 
-	 myTrackBarChart = echarts.init(trackBarDiv, curTheme);
-	
-	    
-	 myTrackBarChart.setOption(optionTrackBar());
-	    
-		
-}
-
-//加载历史变化趋势
-function loadHistoryLine(){
-
-	var historyLineDiv= document.getElementById('history-line-div');
-	
-	 if (myHistoryLineChart && myHistoryLineChart.dispose) {
-		 myHistoryLineChart.dispose();
-	 }
-	 
-	 myHistoryLineChart = echarts.init(historyLineDiv, curTheme);
-	
-	    
-	 myHistoryLineChart.setOption(optionHistoryLine());
-	    
-		
-}
-
-//加载项目分布
-function loadProjectBar(){
-
-	var projectBarDiv= document.getElementById('project-bar-div');
-	
-	 if (myProjectBarChart && myProjectBarChart.dispose) {
-		 myProjectBarChart.dispose();
-	 }
-	 
-	 myProjectBarChart = echarts.init(projectBarDiv, curTheme);
-	
-	    
-	 myProjectBarChart.setOption(optionProjectBar());
-	    
-		
-}
 
 var domCode = document.getElementById('sidebar-code');
 var domGraphic = document.getElementById('graphic');

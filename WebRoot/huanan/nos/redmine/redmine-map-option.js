@@ -16,7 +16,7 @@ function optionChinaMap(){
 		        formatter: '{b}<br/>{c} (标准工时)'
 		    },
 		    toolbox: {
-		        show : true,
+		        show : false,
 		        orient : 'vertical',
 		        x: 'right',
 		        y: 'center',
@@ -40,6 +40,7 @@ function optionChinaMap(){
 		            name: 'Redime',
 		            type: 'map',
 		            mapType: 'ChinaNormal', // 自定义扩展图表类型
+		            //mapType:'china',
 		            itemStyle:{
 		                normal:{label:{show:true}},
 		                emphasis:{label:{show:true}}
